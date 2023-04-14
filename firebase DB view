@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Firebase databases</title>
+        <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-app.js"></script>
+         <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-database.js"></script>
+  </head>
+  <body>
+    <style>
+td{
+  border-top: 2px solid black;
+}
+    </style>
+    <table>
+      <thead>
+          <tr>
+            <th>Название таблицы</th>
+            <th>Данные</th>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    <script>
+    (async function(){
+
+
+    const firebaseConfig = {
+
+                apiKey: "AIzaSy666666666b8NllAcONJmSd6trI",
+
+                   authDomain: "banking-966ce.firebaseapp.com",
+
+                   databaseURL: "https://banking-968ce-default-rtdb.firebaseio.com",
+
+                   projectId: "banking-668ce",
+
+                   storageBucket: "banking-66ce.appspot.com",
+
+                   messagingSenderId: "159692490719",
+
+                   appId: "1:1596690719:web:a2246376667a218a66a"
+
+            };
+
+            const fb = firebase.initializeApp(firebaseConfig);
+            const tables = ['messages', 'user_fcm', 'admins', 'users', 'shared_chat', 'notes'];
+
+             function getData(table){
+                return new Promise(async(resolve) => {
+                  const fbGetNews =  await fb.database().ref(table).once('value');
+                //  console.log(table, fbGetNews);
+                  const fbValue = fbGetNews.val();
+                  resolve(fbValue)
+                })
+              }
+
+              for(let table of tables){
+                let data=  await getData(table);
+                let tr = document.createElement('tr');
+                tr.innerHTML = `
+                <td>${table}</td>
+                <td><pre>${data ? JSON.stringify(data,null, 4): 'Нет данных'}</pre></td>
+                `;
+                document.querySelector('tbody').appendChild(tr);
+                //console.log(table, data);
+              }
+
+            })();
+
+    </script>
+
+  </body>
+</html>
